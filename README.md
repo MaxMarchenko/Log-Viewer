@@ -14,12 +14,12 @@ Features:
 2. Display pager to navigate (previous/next 10/25/50/100 lines)
 
 3. Ability to search for specific lines using:
-- simple search
-- regular expression
+  - simple search
+  - regular expression
 
 4. Filters:
-- by log file
-- by date and time range
+  - by log file
+  - by date and time range
 
 LogReaderService allow to apply multiple filters at the same time.
 
@@ -56,11 +56,3 @@ Table structures (auto generated be Doctrine):
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 
 System requirements same as for Symfony 2.7.
-
-
-
-
-
-
-
-
