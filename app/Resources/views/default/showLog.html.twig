@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts %}
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script type="text/javascript">
+    $('#perPage').change(function(){
+        var url = '{{path('showLog',{'perPage':'_itemNum'})}}';
+        var item = $('#perPage').find(":selected").text();
+        window.location.href = url.replace('_itemNum',item );
+    });
+</script>
+{% endblock %}
+
+{% block body %}
+    {% set selectedPerPage = app.request.get('perPage') %}
+    <label for="perPage">Per page</label>
+    <select name="perPage" id="perPage">
+        {% for perPage in perPageSettings %}
+            <option id="{{ perPage }}" {% if selectedPerPage == perPage %}selected{% endif %}>{{ perPage }}</option>
+        {% endfor %}
+    </select>
+    <br/><br/>
+    <form>
+        <label for="search">Search (use '/pattern/' for RegExp):</label>
+        <input id="search" type="text" size="100" name="search" value="{{ app.request.get('search') }}">
+        <br/><br/>
+        <label for="filterName">File Name:</label>
+        <input id="filterName" type="text" size="100" name="filterName" value="{{ app.request.get('filterName') }}">
+        <br/><br/>
+        <label for="filterTimeFrom">Time from:</label>
+        <input id="filterTimeFrom" type="text" size="20" name="filterTimeFrom" value="{{ app.request.get('filterTimeFrom') }}">
+        <label for="filterTimeFrom">to:</label>
+        <input id="filterTimeTo" type="text" size="20" name="filterTimeTo" value="{{ app.request.get('filterTimeTo') }}">
+        <span>Use "Y-m-d H:i:s" format</span>
+        <br/><br/>
+        <input type="submit" value="Show logs">
+    </form>
+    {% for filePath,pagination in paginations %}
+        <div>
+            Path: {{ filePath }}
+        </div>
+        <div>
+            Total lines: {{ pagination.getTotalItemCount }}
+        </div>
+        <table border=1 cellpadding=3 cellspacing=0 style="border: 1pt solid; border-Collapse: collapse">
+            <tr>
+                <th>{{ knp_pagination_sortable(pagination, 'Line Number', 'l.lineNumber') }}</th>
+                <th>{{ 'Host' }}</th>
+                <th>{{ 'Logname' }}</th>
+                <th>{{ 'User' }}</th>
+                <th>{{ 'Timestamp' }}</th>
+                <th>{{ 'Request' }}</th>
+                <th>{{ 'Status' }}</th>
+                <th>{{ 'Response Bytes' }}</th>
+            </tr>
+
+            {% for fileLine in pagination %}
+                <tr>
+                    <td>{{ fileLine.lineNumber }}</td>
+                    <td>{{ fileLine.host }}</td>
+                    <td>{{ fileLine.logname }}</td>
+                    <td>{{ fileLine.user }}</td>
+                    <td>{{ fileLine.timestamp|date("Y-m-d H:i:s") }}</td>
+                    <td>{{ fileLine.request }}</td>
+                    <td>{{ fileLine.status }}</td>
+                    <td>{{ fileLine.responseBytes }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <div>
+            {{ knp_pagination_render(pagination) }}
+        </div>
+        <br/>
+    {% endfor %}
+{% endblock %}
