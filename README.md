@@ -56,3 +56,22 @@ Table structures (auto generated be Doctrine):
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 
 System requirements same as for Symfony 2.7.
+
+To install just clone repo and run:
+
+        composer install
+
+Provide access to your database for symfony
+
+Then:
+
+        php app/console doctrine:schema:update --force
+
+You can cofigure path to logs here:
+
+        logViewer/app/config/services.yml
+        logReader.path: '/home/username/logs'
+
+Now you can view logs in browser. For example
+
+        http://localhost:8000/showLog
